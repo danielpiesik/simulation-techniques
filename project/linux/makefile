@@ -9,7 +9,7 @@ EXECUTABLE=simulation
 SRC_EXT=cpp
 
 CXX=g++
-CFLAGS=-Wall -c
+CFLAGS=-Wall -c -I $(SRC_DIR)
 LDFLAGS=
 
 ################################################################################

@@ -13,7 +13,14 @@ Simulation::instance()
 void
 Simulation::start()
 {
-  printf("start simulation\n");
+  logger().info("start simulation\n");
+}
+
+Logger&
+Simulation::logger() const
+{
+  return *p_logger;
+}
 }
 
 double
@@ -22,7 +29,16 @@ Simulation::getSimulationTime()
   return m_simulationTime;
 }
 
+void
+Simulation::setLogger(const Logger &inLogger)
+{
+  p_logger = std::make_shared<Logger> (inLogger);
+}
 
 Simulation::Simulation()
-  : m_simulationTime(0.0)
+  : p_logger(nullptr)
+  , m_simulationTime(0.0)
+{}
+
+Simulation::~Simulation()
 {}
