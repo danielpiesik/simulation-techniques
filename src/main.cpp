@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
   Logger logger = Logger(Verbose::debug);
 
   Simulation::instance().setLogger(logger);
+  Simulation::instance().createResources();
   Simulation::instance().start();
   return 0;
 }

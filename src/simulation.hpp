@@ -3,6 +3,8 @@
 
 #include <memory>
 #include "logger/logger.hpp"
+#include "resources/table.hpp"
+#include "resources/tester.hpp"
 
 
 class Simulation
@@ -17,16 +19,19 @@ public:
 
   void start();
 
-  double getSimulationTime();
   Logger& logger() const;
+  Table& table() const;
+  double getSimulationTime() const;
 
   void setLogger(const Logger &inLogger);
+  void createResources();
 
 private:
 
   Simulation();
 
   std::shared_ptr<Logger> p_logger;
+  std::shared_ptr<Table> p_table;
 
   double m_simulationTime;
 
