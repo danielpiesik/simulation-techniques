@@ -17,6 +17,12 @@ Simulation::start()
   logger().info("start simulation");
 }
 
+Agenda&
+Simulation::agenda() const
+{
+  return *p_agenda;
+}
+
 Logger&
 Simulation::logger() const
 {
@@ -46,6 +52,8 @@ Simulation::createResources()
 {
   logger().info("create resources");
 
+  // agenda
+  p_agenda = new Agenda();
 
   // table
   p_table = new Table();
@@ -60,6 +68,7 @@ Simulation::createResources()
 
 Simulation::Simulation()
   : p_logger(nullptr)
+  , p_agenda(nullptr)
   , p_table(nullptr)
   , m_simulationTime(0.0)
 {}

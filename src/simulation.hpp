@@ -1,6 +1,7 @@
 #ifndef SIMULATION_HPP
 #define SIMULATION_HPP
 
+#include "m4/agenda.hpp"
 #include "logger/logger.hpp"
 #include "resources/table.hpp"
 #include "resources/tester.hpp"
@@ -8,6 +9,7 @@
 
 class Simulation
 {
+
 public:
 
   static Simulation &instance();
@@ -18,6 +20,7 @@ public:
 
   void start();
 
+  Agenda& agenda() const;
   Logger& logger() const;
   Table& table() const;
   double simulationTime() const;
@@ -30,6 +33,7 @@ private:
   Simulation();
 
   Logger *p_logger;
+  Agenda *p_agenda;
   Table *p_table;
 
   double m_simulationTime;
