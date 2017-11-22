@@ -41,4 +41,5 @@ private:
 
 };
 
+
 #endif // LOGGER_HPP

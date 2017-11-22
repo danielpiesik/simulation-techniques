@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "simulation.hpp"
 #include "settings.hpp"
+#include "resources/circuit.hpp"
 
 
 Simulation&
@@ -13,7 +14,7 @@ Simulation::instance()
 void
 Simulation::start()
 {
-  logger().info("start simulation\n");
+  logger().info("start simulation");
 }
 
 Logger&
@@ -29,24 +30,25 @@ Simulation::table() const
 }
 
 double
-Simulation::getSimulationTime() const
+Simulation::simulationTime() const
 {
   return m_simulationTime;
 }
 
 void
-Simulation::setLogger(const Logger &inLogger)
+Simulation::setLogger(Logger &inLogger)
 {
-  p_logger = std::make_shared<Logger> (inLogger);
+  p_logger = &inLogger;
 }
 
 void
 Simulation::createResources()
 {
-  logger().info("create resources\n");
+  logger().info("create resources");
+
 
   // table
-  p_table = std::shared_ptr<Table> (new Table());
+  p_table = new Table();
 
   // testers
   table().testers().reserve(TaskSettings.m_numberOfTesters);

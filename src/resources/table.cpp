@@ -3,24 +3,37 @@
 
 
 Table::Table()
-  : m_testers(std::vector<std::shared_ptr<Tester>>())
+  : m_testers(std::vector<Tester*>())
+  , m_circuits(std::vector<Circuit*>())
 {
-  Simulation::instance().logger().debug("constructor of Table\n");
+  Simulation::instance().logger().debug("constructor of Table");
 }
 
 Table::~Table()
 {
-  Simulation::instance().logger().debug("destructor of Table\n");
+  Simulation::instance().logger().debug("destructor of Table");
 }
 
 void
 Table::addTester(Tester *inTester)
 {
-  testers().push_back(std::shared_ptr<Tester>(inTester));
+  testers().push_back(inTester);
 }
 
-std::vector<std::shared_ptr<Tester>>&
+void
+Table::enqueue(Circuit *inCircuit)
+{
+  circuits().push_back(inCircuit);
+}
+
+std::vector<Tester*>&
 Table::testers()
 {
   return m_testers;
+}
+
+std::vector<Circuit*>&
+Table::circuits()
+{
+  return m_circuits;
 }

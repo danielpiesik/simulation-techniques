@@ -1,11 +1,9 @@
-#include <iostream>
+#include <string>
 #include <stdarg.h>
 #include "logger/logger.hpp"
 #include "simulation.hpp"
 
 
-#include <string>
-#include <fstream>
 Logger::Logger(const Verbose &inLevel)
   : m_level(inLevel)
 {}
@@ -73,9 +71,10 @@ Logger::print(const Verbose &inLevel, const char *format, va_list args)
   }
 
   printf("%10.2f [%8.8s]:  ",
-        Simulation::instance().getSimulationTime(),
+        Simulation::instance().simulationTime(),
         levelMessage(inLevel).c_str());
   vfprintf(stdout, format, args);
+  printf("\n");
 }
 
 std::string

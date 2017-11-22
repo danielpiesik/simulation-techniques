@@ -2,8 +2,8 @@
 #define TABLE_HPP
 
 #include <vector>
-#include <memory>
 #include "resources/tester.hpp"
+#include "resources/circuit.hpp"
 
 
 class Table
@@ -15,12 +15,15 @@ public:
   ~Table();
 
   void addTester(Tester *inTester);
+  void enqueue(Circuit *inCircuit);
 
-  std::vector<std::shared_ptr<Tester>>& testers();
+  std::vector<Tester*>& testers();
+  std::vector<Circuit*>& circuits();
 
 private:
 
-  std::vector<std::shared_ptr<Tester>> m_testers;
+  std::vector<Tester*> m_testers;
+  std::vector<Circuit*> m_circuits;
 
 };
 
