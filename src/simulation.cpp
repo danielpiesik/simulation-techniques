@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "m4/process.hpp"
 #include "simulation.hpp"
 #include "settings.hpp"
 #include "resources/circuit.hpp"
@@ -15,6 +16,20 @@ void
 Simulation::start()
 {
   logger().info("start simulation");
+
+  (new Circuit)->activate();
+
+  while (simulationTime() < 500)
+  {
+    Process *current_process = agenda().first()->process();
+    agenda().removeFirst();
+    m_simulationTime = current_process->time();
+    current_process->execute();
+    if (current_process->isTerminated())
+    {
+      delete current_process;
+    }
+  }
 }
 
 Agenda&

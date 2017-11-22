@@ -1,8 +1,17 @@
 #ifndef CIRCUIT_HPP
 #define CIRCUIT_HPP
 
+#include "m4/process.hpp"
 
-class Circuit
+
+enum class Phase : unsigned int
+{
+  injection = 0,
+  waiting_in_queue,
+};
+
+
+class Circuit: public Process
 {
 
 public:
@@ -10,7 +19,11 @@ public:
   Circuit();
   ~Circuit();
 
+  virtual void execute();
+
 private:
+
+  void injection();
 
 };
 
