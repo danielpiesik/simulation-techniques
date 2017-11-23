@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include "m4/process.hpp"
 #include "simulation.hpp"
-#include "settings.hpp"
+#include "metadata/settings.hpp"
+#include "metadata/generators.hpp"
 #include "resources/circuit.hpp"
 
 
@@ -16,6 +16,10 @@ void
 Simulation::start()
 {
   logger().info("start simulation");
+
+  RNG::instance().m_curcuitGenerator.reset(
+    RNG::instance().m_seedGenerator.value(7596, 9056468)
+  );
 
   (new Circuit)->activate();
 
@@ -89,4 +93,10 @@ Simulation::Simulation()
 {}
 
 Simulation::~Simulation()
-{}
+{
+  logger().info("remove resources");
+  if (p_agenda)
+    delete p_agenda;
+  if (p_table)
+    delete p_table;
+}

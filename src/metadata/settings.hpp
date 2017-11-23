@@ -9,6 +9,7 @@ static struct Time
   const double  HOUR   = 60 * MINUTE;
 } Time;
 
+
 static struct TaskSettings
 {
   const unsigned int m_numberOfTesters = 3;   // N
@@ -19,11 +20,19 @@ static struct TaskSettings
 
 } TaskSettings;
 
+
 static struct SimulationSettings
 {
   const int a = 0; // TODO: remove it. It is only for silencing warning
 
 } SimulationSettings;
+
+
+static struct GeneratorsSettings
+{
+  const double circuit_generator_mean = 1; // A
+
+} GeneratorsSettings;
 
 
 #endif // SETTINGS_HPP

@@ -12,6 +12,11 @@ Table::Table()
 Table::~Table()
 {
   Simulation::instance().logger().debug("destructor of Table");
+  for (Tester *tester : m_testers)
+  {
+    delete tester;
+  }
+  m_testers.clear();
 }
 
 void

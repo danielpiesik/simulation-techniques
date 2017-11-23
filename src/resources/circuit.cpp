@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include "resources/circuit.hpp"
+#include "metadata/generators.hpp"
 #include "simulation.hpp"
 
 
@@ -16,7 +17,6 @@ Circuit::~Circuit()
 void
 Circuit::execute()
 {
-  Simulation::instance().logger().debug("In circuit execute");
   bool active = true;
   while (active)
   {
@@ -46,8 +46,8 @@ Circuit::execute()
 void
 Circuit::injection()
 {
-  Simulation::instance().logger().debug("injection phase");
-  (new Circuit)->activate(50);
+  Simulation::instance().logger().debug("circuit %p: injection phase", this);
+  (new Circuit)->activate(RNG::instance().m_curcuitGenerator.value());
   Simulation::instance().table().enqueue(this);
   m_phase = static_cast<unsigned int>(Phase::waiting_in_queue);
 }
