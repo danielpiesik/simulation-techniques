@@ -28,6 +28,8 @@ public:
   void addTester(Tester *inTester);
   void enqueue(Circuit *inCircuit);
 
+  bool isMotionless();
+
   std::vector<Tester*>& testers();
   std::vector<Circuit*>& circuits();
 
@@ -35,6 +37,9 @@ private:
 
   std::vector<Tester*> m_testers;
   std::vector<Circuit*> m_circuits;
+
+  void tryRotate();
+  void finishRotate();
 
 };
 

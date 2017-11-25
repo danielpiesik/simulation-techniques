@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <vector>
+#include "resources/table.hpp"
 #include "resources/tester.hpp"
 #include "resources/circuit.hpp"
 #include "metadata/generators.hpp"
@@ -78,8 +79,9 @@ Circuit::injection()
 void
 Circuit::tryStartTesting()
 {
-  std::vector<Circuit*> &circuits = Simulation::instance().table().circuits();
-  std::vector<Tester*> &testers = Simulation::instance().table().testers();
+  Table &table = Simulation::instance().table();
+  std::vector<Circuit*> &circuits = table.circuits();
+  std::vector<Tester*> &testers = table.testers();
 
   if (circuits.empty())
   {
@@ -89,7 +91,7 @@ Circuit::tryStartTesting()
   }
 
   Tester &first_tester = *testers.front();
-  if (first_tester.isIdle())
+  if (table.isMotionless() && first_tester.isIdle())
   {
       if (circuits.front() != this)
       {
@@ -98,7 +100,8 @@ Circuit::tryStartTesting()
         throw std::runtime_error("Trying to test not first circuit");
       }
 
-    first_tester.startTesting(this);
+    first_tester.prepareTest(this);
+    first_tester.activate();
     circuits.erase(circuits.begin());
     m_phase = static_cast<int>(CircuitPhase::being_tested);
   }

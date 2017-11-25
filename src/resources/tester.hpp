@@ -24,11 +24,18 @@ public:
 
   virtual void execute();
 
-  void startTesting(Circuit *inCircuit);
+  void prepareTest(Circuit *inCircuit);
+  void moveCircuitTo(Tester *inTester);
+  void utilizeCircuit();
 
   bool isIdle();
+  bool isWaiting();
+  bool hasCircuit();
 
 private:
+
+  void startTesting();
+  void finishTesting();
 
   int m_id;
   Circuit* p_circuit;
