@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstdlib>
 #include <stdexcept>
 #include "rng/rng.hpp"
 
@@ -37,9 +38,14 @@ UniformRNG::value(double min, double max)
 }
 
 void
-UniformRNG::reset(int seed)
+UniformRNG::reset()
 {
-  m_seed = seed;
+  int new_seed = 0;
+  do
+  {
+    new_seed = rand();
+  } while(new_seed == m_seed || new_seed == 0);
+  m_seed = new_seed;
 }
 
 
@@ -58,7 +64,27 @@ ExponentialRNG::value()
 }
 
 void
-ExponentialRNG::reset(int seed)
+ExponentialRNG::reset()
 {
-  m_uniform.reset(seed);
+  m_uniform.reset();
+}
+
+
+NormalRNG::NormalRNG(double mean, double stddev)
+  : m_distribution(std::normal_distribution<double>(mean, stddev))
+{}
+
+NormalRNG::~NormalRNG()
+{}
+
+double
+NormalRNG::value()
+{
+  return m_distribution(m_generator);
+}
+
+void
+NormalRNG::reset()
+{
+  m_distribution.reset();
 }

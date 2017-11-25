@@ -13,7 +13,14 @@ static struct Time
 static struct TaskSettings
 {
   const unsigned int m_numberOfTesters = 3;   // N
-  const double m_timeOfRotation = 1 * Time.MINUTE; // T
+
+  const double m_meanAndStdDevForTestingTime[3][2] = {
+    {15.0 * Time.MINUTE, 1.0 * Time.MINUTE},
+    {15.0 * Time.MINUTE, 1.0 * Time.MINUTE},
+    {15.0 * Time.MINUTE, 1.0 * Time.MINUTE},
+  };
+
+  const double m_timeOfRotation = 10 * Time.MINUTE; // T
 
   const double m_minBreakDownTime = 1 * Time.MINUTE; // LB
   const double m_maxBreakDownTime = 10 * Time.MINUTE; // MB
@@ -30,7 +37,7 @@ static struct SimulationSettings
 
 static struct GeneratorsSettings
 {
-  const double circuit_generator_mean = 1; // A
+  const double circuit_generator_mean = 30; // A
 
 } GeneratorsSettings;
 

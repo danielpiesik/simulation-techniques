@@ -1,6 +1,7 @@
 #ifndef GENERATORS_HPP
 #define GENERATORS_HPP
 
+#include <vector>
 #include "rng/rng.hpp"
 
 
@@ -15,6 +16,7 @@ public:
 
   UniformRNG m_seedGenerator;
   ExponentialRNG m_curcuitGenerator;
+  std::vector<NormalRNG> m_testingTimeByTester;
 
 private:
 

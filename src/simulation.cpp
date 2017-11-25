@@ -17,9 +17,10 @@ Simulation::start()
 {
   logger().info("start simulation");
 
-  RNG::instance().m_curcuitGenerator.reset(
-    RNG::instance().m_seedGenerator.value(7596, 9056468)
-  );
+
+  RNG::instance().m_curcuitGenerator.reset();
+  for (auto &rng : RNG::instance().m_testingTimeByTester)
+    rng.reset();
 
   (new Circuit)->activate();
 

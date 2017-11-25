@@ -1,6 +1,8 @@
 #ifndef RNG_HPP
 #define RNG_HPP
 
+#include <random>
+
 
 class UniformRNG
 {
@@ -12,9 +14,9 @@ public:
 
   double value();
   double value(double min, double max);
-  void reset(int seed);
+  void reset();
 
-// private:
+private:
 
   int m_seed;
 
@@ -30,14 +32,32 @@ public:
   ~ExponentialRNG();
 
   double value();
-  void reset(int seed);
+  void reset();
 
-// private:
+private:
 
   double m_mean;
   UniformRNG m_uniform;
 
 };
 
+
+class NormalRNG
+{
+
+public:
+
+  NormalRNG(double mean, double variance);
+  ~NormalRNG();
+
+  double value();
+  void reset();
+
+private:
+
+  std::default_random_engine m_generator;
+  std::normal_distribution<double> m_distribution;
+
+};
 
 #endif // RNG_HPP
