@@ -20,10 +20,10 @@ public:
 protected:
 
   int m_phase;
+  bool m_terminated;
 
 private:
 
-  bool m_terminated;
   Event* p_event;
 
 };

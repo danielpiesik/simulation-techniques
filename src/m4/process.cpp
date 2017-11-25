@@ -6,13 +6,10 @@ Process::Process()
   : m_phase(0)
   , m_terminated(false)
   , p_event(new Event(this))
-{
-  Simulation::instance().logger().debug("constructor of Process");
-}
+{}
 
 Process::~Process()
 {
-  Simulation::instance().logger().debug("destructor of Process");
   delete p_event;
 }
 

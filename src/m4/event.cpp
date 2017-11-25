@@ -6,14 +6,10 @@
 Event::Event(Process *inProcess)
   : m_executeTime(-1.0)
   , p_process(inProcess)
-{
-  Simulation::instance().logger().debug("constructor of Event");
-}
+{}
 
 Event::~Event()
-{
-  Simulation::instance().logger().debug("destructor of Event");
-}
+{}
 
 double
 Event::executeTime() const

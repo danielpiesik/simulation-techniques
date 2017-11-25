@@ -12,9 +12,13 @@ public:
   Tester();
   ~Tester();
 
+  void startTesting(Circuit *inCircuit);
+
+  bool isIdle();
+
 private:
 
-  bool m_busy;
+  bool m_idle;
   Circuit* p_circuit;
 
 };

@@ -3,11 +3,14 @@
 
 #include "m4/process.hpp"
 
+class Tester;
 
-enum class Phase : unsigned int
+
+enum class CircuitPhase: int
 {
   injection = 0,
   waiting_in_queue,
+  being_tested,
 };
 
 
@@ -21,9 +24,19 @@ public:
 
   virtual void execute();
 
+  void testedBy(Tester *inTester);
+
+  int id();
+
 private:
 
   void injection();
+  void tryStartTesting();
+  void utilize();
+
+  static int m_globalId;
+  int m_id;
+  Tester *p_tester;
 
 };
 
