@@ -2,17 +2,28 @@
 #define TABLE_HPP
 
 #include <vector>
+#include "m4/process.hpp"
 #include "resources/tester.hpp"
 #include "resources/circuit.hpp"
 
 
-class Table
+enum class TablePhase: int
+{
+  motionless = 0,
+  rotating,
+  break_down,
+};
+
+
+class Table: public Process
 {
 
 public:
 
   Table();
   ~Table();
+
+  virtual void execute();
 
   void addTester(Tester *inTester);
   void enqueue(Circuit *inCircuit);

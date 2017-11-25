@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "resources/table.hpp"
 #include "simulation.hpp"
 
@@ -17,6 +18,32 @@ Table::~Table()
     delete tester;
   }
   m_testers.clear();
+}
+
+void
+Table::execute()
+{
+  switch (static_cast<TablePhase>(m_phase))
+  {
+    case TablePhase::motionless:
+    {
+      break;
+    }
+    case TablePhase::rotating:
+    {
+      break;
+    }
+    case TablePhase::break_down:
+    {
+      break;
+    }
+    default:
+    {
+      Simulation::instance().logger().critical(
+        "Invalid phase (%d) in table process", m_phase);
+      throw std::runtime_error("Invalid phase in table process");
+    }
+  }
 }
 
 void

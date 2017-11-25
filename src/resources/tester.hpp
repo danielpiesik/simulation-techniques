@@ -1,16 +1,28 @@
 #ifndef TESTER_HPP
 #define TESTER_HPP
 
+#include "m4/process.hpp"
 #include "resources/circuit.hpp"
 
 
-class Tester
+enum class TesterPhase: int
+{
+  idle = 0,
+  testing,
+  waiting,
+  break_down,
+};
+
+
+class Tester: public Process
 {
 
 public:
 
-  Tester();
+  Tester(int id);
   ~Tester();
+
+  virtual void execute();
 
   void startTesting(Circuit *inCircuit);
 
@@ -18,7 +30,7 @@ public:
 
 private:
 
-  bool m_idle;
+  int m_id;
   Circuit* p_circuit;
 
 };

@@ -81,7 +81,7 @@ Simulation::createResources()
   table().testers().reserve(TaskSettings.m_numberOfTesters);
   for(unsigned int i = 0; i < TaskSettings.m_numberOfTesters; ++i)
   {
-    table().addTester(new Tester());
+    table().addTester(new Tester(i));
   }
 }
 
