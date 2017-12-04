@@ -9,7 +9,7 @@ class UniformRNG
 
 public:
 
-  UniformRNG(int seed);
+  UniformRNG(double a = 0.0, double b = 1.0);
   ~UniformRNG();
 
   double value();
@@ -18,7 +18,8 @@ public:
 
 private:
 
-  int m_seed;
+  std::default_random_engine m_generator;
+  std::uniform_real_distribution<double> m_distribution;
 
 };
 
@@ -28,7 +29,7 @@ class ExponentialRNG
 
 public:
 
-  ExponentialRNG(double mean, int seed);   // mean = 1 / lambda
+  ExponentialRNG(double lambda = 1.0);   // lambda = 1 / mean
   ~ExponentialRNG();
 
   double value();
@@ -36,8 +37,8 @@ public:
 
 private:
 
-  double m_mean;
-  UniformRNG m_uniform;
+  std::default_random_engine m_generator;
+  std::exponential_distribution<double> m_distribution;
 
 };
 
@@ -47,7 +48,7 @@ class NormalRNG
 
 public:
 
-  NormalRNG(double mean, double variance);
+  NormalRNG(double mean = 0.0, double stddev = 1.0);
   ~NormalRNG();
 
   double value();

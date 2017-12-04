@@ -5,8 +5,7 @@
 
 
 RNG::RNG()
-  : m_seedGenerator(rand() + 4536547)
-  , m_curcuitGenerator(GeneratorsSettings.circuit_generator_mean, 0)
+  : m_curcuitGenerator(1.0 / TaskSettings.m_circuitInjectionIntervalMean)
   , m_testingTimeByTester(std::vector<NormalRNG>())
 {
   srand((unsigned int)time(NULL));

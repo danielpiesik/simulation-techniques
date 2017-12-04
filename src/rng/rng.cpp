@@ -1,11 +1,13 @@
 #include <cmath>
+#include <chrono>
 #include <cstdlib>
 #include <stdexcept>
 #include "rng/rng.hpp"
 
 
-UniformRNG::UniformRNG(int seed)
-  : m_seed(seed)
+UniformRNG::UniformRNG(double a, double b)
+  : m_generator(std::chrono::system_clock::now().time_since_epoch().count())
+  , m_distribution(std::uniform_real_distribution<double>(a, b))
 {}
 
 UniformRNG::~UniformRNG()
@@ -14,17 +16,7 @@ UniformRNG::~UniformRNG()
 double
 UniformRNG::value()
 {
-  static const int q = 127773;
-  static const int r = 2836;
-  static const int range = 2147483647; //2^31-1
-
-  int h = int(m_seed / q);
-  m_seed = 16807 * (m_seed - q * h) - r * h;
-  if (m_seed < 0)
-  {
-    m_seed += range;
-  }
-  return (double)(m_seed) / (double)(range);
+  return m_distribution(m_generator);
 }
 
 double
@@ -40,18 +32,13 @@ UniformRNG::value(double min, double max)
 void
 UniformRNG::reset()
 {
-  int new_seed = 0;
-  do
-  {
-    new_seed = rand();
-  } while(new_seed == m_seed || new_seed == 0);
-  m_seed = new_seed;
+  m_distribution.reset();
 }
 
 
-ExponentialRNG::ExponentialRNG(double mean, int seed)
-  : m_mean(mean)
-  , m_uniform(seed)
+ExponentialRNG::ExponentialRNG(double lambda)
+  : m_generator(std::chrono::system_clock::now().time_since_epoch().count())
+  , m_distribution(std::exponential_distribution<double>(lambda))
 {}
 
 ExponentialRNG::~ExponentialRNG()
@@ -60,18 +47,19 @@ ExponentialRNG::~ExponentialRNG()
 double
 ExponentialRNG::value()
 {
-  return -log(m_uniform.value()) * m_mean;
+  return m_distribution(m_generator);
 }
 
 void
 ExponentialRNG::reset()
 {
-  m_uniform.reset();
+  m_distribution.reset();
 }
 
 
 NormalRNG::NormalRNG(double mean, double stddev)
-  : m_distribution(std::normal_distribution<double>(mean, stddev))
+  : m_generator(std::chrono::system_clock::now().time_since_epoch().count())
+  , m_distribution(std::normal_distribution<double>(mean, stddev))
 {}
 
 NormalRNG::~NormalRNG()

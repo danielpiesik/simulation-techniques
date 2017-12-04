@@ -14,7 +14,6 @@ public:
   RNG(const RNG &inRNG) = delete;
   void operator=(const RNG &inRNG) = delete;
 
-  UniformRNG m_seedGenerator;
   ExponentialRNG m_curcuitGenerator;
   std::vector<NormalRNG> m_testingTimeByTester;
 
