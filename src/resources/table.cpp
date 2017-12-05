@@ -52,6 +52,9 @@ Table::execute()
 void
 Table::tryRotate()
 {
+  if (!anyTesterHasCircuit())
+    return;
+
   for (Tester *tester : testers())
   {
     if ( !(tester->isIdle() || tester->isWaiting()) )
@@ -110,25 +113,40 @@ Table::finishRotate()
   )
   {
     Tester *tester = (*tester_iter);
+    Tester *prev_tester = *std::prev(tester_iter);
 
-    if(tester_iter == testers().rbegin()) // last element
+    if (!tester->hasCircuit())
+      continue;
+
+    if(tester->isLastTester())
     {
-      if (tester->hasCircuit())
-        tester->utilizeCircuit();
-    }
-    else if(std::next(tester_iter) == testers().rend()) // first element
-    {
-      if (tester->hasCircuit())
-        tester->moveCircuitTo(*std::prev(tester_iter));
-      if (!Simulation::instance().table().circuits().empty())
-        Simulation::instance().table().circuits().front()->activate();
+      tester->utilizeCircuit();
     }
     else
     {
-      if (tester->hasCircuit())
-        tester->moveCircuitTo(*std::prev(tester_iter));
+      if (prev_tester->isBroken())
+        tester->utilizeCircuit();
+      else
+        tester->moveCircuitTo(prev_tester);
+    }
+
+    if(tester->isFirstTester()
+       && !Simulation::instance().table().circuits().empty())
+    {
+      Simulation::instance().table().circuits().front()->activate();
     }
   }
 
   m_phase = static_cast<int>(TablePhase::motionless);
+}
+
+bool
+Table::anyTesterHasCircuit()
+{
+  for (auto &tester : testers())
+  {
+    if (tester->hasCircuit())
+      return true;
+  }
+  return false;
 }

@@ -1,4 +1,5 @@
 #include "m4/process.hpp"
+#include "rng/rng.hpp"
 #include "simulation.hpp"
 #include "metadata/settings.hpp"
 #include "metadata/generators.hpp"
@@ -26,9 +27,10 @@ Simulation::start()
 
   while (simulationTime() < 500)
   {
-    Process *current_process = agenda().first()->process();
+    Event *current_event = agenda().first();
+    Process *current_process = current_event->process();
+    m_simulationTime = current_event->executeTime();
     agenda().removeFirst();
-    m_simulationTime = current_process->time();
     current_process->execute();
     if (current_process->isTerminated())
     {
@@ -82,7 +84,12 @@ Simulation::createResources()
   table().testers().reserve(TaskSettings.m_numberOfTesters);
   for(unsigned int i = 0; i < TaskSettings.m_numberOfTesters; ++i)
   {
-    table().addTester(new Tester(i));
+    ExponentialRNG* g1;
+    UniformRNG* g2;
+    g1 = new ExponentialRNG(1.0 / TaskSettings.m_breakDownIntervalMean);
+    g2 = new UniformRNG(TaskSettings.m_minBreakDownTime,
+                        TaskSettings.m_maxBreakDownTime);
+    table().addTester(new Tester(i, g1, g2));
   }
 }
 

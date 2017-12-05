@@ -41,6 +41,8 @@ private:
   void tryRotate();
   void finishRotate();
 
+  bool anyTesterHasCircuit();
+
 };
 
 

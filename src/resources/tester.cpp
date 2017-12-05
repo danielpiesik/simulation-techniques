@@ -4,16 +4,29 @@
 #include "simulation.hpp"
 
 
-Tester::Tester(int id)
+Tester::Tester(int id, ExponentialRNG* inBreakDownGenerator,
+               UniformRNG* inBreakDownDurationGenerator)
   : m_id(id)
   , p_circuit(nullptr)
+  , m_nextBreakDownTime(0.0)
+  , m_finishBreakDownTime(0.0)
+  , p_breakDownGenerator(inBreakDownGenerator)
+  , p_breakDownDurationGenerator(inBreakDownDurationGenerator)
 {
   Simulation::instance().logger().debug("constructor of Tester");
+  planBreakDown();
 }
 
 Tester::~Tester()
 {
   Simulation::instance().logger().debug("destructor of Tester");
+
+  if (p_circuit)
+    delete p_circuit;
+  if (p_breakDownGenerator)
+    delete p_breakDownGenerator;
+  if (p_breakDownDurationGenerator)
+    delete p_breakDownDurationGenerator;
 }
 
 void
@@ -23,20 +36,30 @@ Tester::execute()
   {
     case TesterPhase::idle:
     {
-      startTesting();
+      if (isItBreakDownTime())
+        breakDown();
+      else
+        startTesting();
       break;
     }
     case TesterPhase::testing:
     {
-      finishTesting();
+      if (isItBreakDownTime())
+        breakDown();
+      else
+        finishTesting();
       break;
     }
     case TesterPhase::waiting:
     {
+      if (isItBreakDownTime())
+        breakDown();
       break;
     }
     case TesterPhase::break_down:
     {
+      if (isItFinishBreakDownTime())
+        finishBraekDown();
       break;
     }
     default:
@@ -112,9 +135,27 @@ Tester::isWaiting()
 }
 
 bool
+Tester::isBroken()
+{
+  return static_cast<TesterPhase>(m_phase) == TesterPhase::break_down;
+}
+
+bool
 Tester::hasCircuit()
 {
   return p_circuit != nullptr;
+}
+
+bool
+Tester::isFirstTester()
+{
+  return *Simulation::instance().table().testers().begin() == this;
+}
+
+bool
+Tester::isLastTester()
+{
+  return Simulation::instance().table().testers().back() == this;
 }
 
 void
@@ -139,4 +180,58 @@ Tester::finishTesting()
   Simulation::instance().table().activate();
   Simulation::instance().logger().debug(
     "tester %d finished testing the circuit %d", m_id, p_circuit->id());
+}
+
+bool
+Tester::isItBreakDownTime()
+{
+  return Simulation::instance().simulationTime() == m_nextBreakDownTime;
+}
+
+bool
+Tester::isItFinishBreakDownTime()
+{
+  return Simulation::instance().simulationTime() == m_finishBreakDownTime;
+}
+
+void
+Tester::planBreakDown()
+{
+  double time = p_breakDownGenerator->value();
+  this->activate(time);
+  m_nextBreakDownTime = Simulation::instance().simulationTime() + time;
+  Simulation::instance().logger().debug(
+    "tester %d will break down next time on %f", m_id, m_nextBreakDownTime);
+}
+
+void
+Tester::breakDown()
+{
+  if (hasCircuit())
+    utilizeCircuit();
+  m_phase = static_cast<int>(TesterPhase::break_down);
+
+  Simulation::instance().agenda().removeProcess(this);
+
+  double time = p_breakDownDurationGenerator->value();
+  this->activate(time);
+  m_finishBreakDownTime = Simulation::instance().simulationTime() + time;
+  Simulation::instance().logger().debug(
+    "tester %d is going to break down and it will finish on %f",
+    m_id, m_finishBreakDownTime);
+}
+
+void
+Tester::finishBraekDown()
+{
+  Simulation::instance().logger().debug("tester %d finished break down", m_id);
+
+  m_phase = static_cast<int>(TesterPhase::idle);
+  planBreakDown();
+
+  if (Simulation::instance().table().isMotionless())
+    Simulation::instance().table().activate();
+
+  if (isFirstTester() && !Simulation::instance().table().circuits().empty())
+    Simulation::instance().table().circuits().front()->activate();
 }

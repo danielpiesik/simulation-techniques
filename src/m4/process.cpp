@@ -20,12 +20,6 @@ Process::activate(double time)
   Simulation::instance().agenda().addEvent(p_event);
 }
 
-double
-Process::time() const
-{
-  return p_event->executeTime();
-}
-
 bool
 Process::isTerminated() const
 {

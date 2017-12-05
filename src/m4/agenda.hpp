@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "m4/event.hpp"
+#include "m4/process.hpp"
 
 
 class Agenda
@@ -13,15 +14,16 @@ public:
   Agenda();
   ~Agenda();
 
-  void addEvent(const Event *inEvent);
-  const Event* first() const;
+  void addEvent(Event *inEvent);
+  Event* first() const;
   void removeFirst();
   bool isEmpty() const;
 
+  void removeProcess(Process *inProcess);
 
 private:
 
-  std::vector<const Event*> m_eventsList;
+  std::vector<Event*> m_eventsList;
 
 };
 

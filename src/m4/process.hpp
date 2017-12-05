@@ -14,7 +14,6 @@ public:
 
   virtual void execute() = 0;
   void activate(double time=0.0);
-  double time() const;
   bool isTerminated() const;
 
 protected:
