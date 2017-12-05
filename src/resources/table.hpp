@@ -20,7 +20,8 @@ class Table: public Process
 
 public:
 
-  Table();
+  Table(ExponentialRNG* inBreakDownGenerator,
+        UniformRNG* inBreakDownDurationGenerator);
   ~Table();
 
   virtual void execute();
@@ -29,19 +30,33 @@ public:
   void enqueue(Circuit *inCircuit);
 
   bool isMotionless();
+  bool isBroken();
 
   std::vector<Tester*>& testers();
   std::vector<Circuit*>& circuits();
 
 private:
 
-  std::vector<Tester*> m_testers;
-  std::vector<Circuit*> m_circuits;
-
   void tryRotate();
   void finishRotate();
 
   bool anyTesterHasCircuit();
+  void utilizeAllCircuits();
+
+  bool isItBreakDownTime();
+  bool isItFinishBreakDownTime();
+  void planBreakDown();
+  void breakDown();
+  void finishBraekDown();
+
+  std::vector<Tester*> m_testers;
+  std::vector<Circuit*> m_circuits;
+
+  double m_nextBreakDownTime;
+  double m_finishBreakDownTime;
+
+  ExponentialRNG* p_breakDownGenerator;
+  UniformRNG* p_breakDownDurationGenerator;
 
 };
 

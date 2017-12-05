@@ -78,7 +78,12 @@ Simulation::createResources()
   p_agenda = new Agenda();
 
   // table
-  p_table = new Table();
+  ExponentialRNG* g1;
+  UniformRNG* g2;
+  g1 = new ExponentialRNG(1.0 / TaskSettings.m_breakDownIntervalMean);
+  g2 = new UniformRNG(TaskSettings.m_minBreakDownTime,
+                      TaskSettings.m_maxBreakDownTime);
+  p_table = new Table(g1, g2);
 
   // testers
   table().testers().reserve(TaskSettings.m_numberOfTesters);

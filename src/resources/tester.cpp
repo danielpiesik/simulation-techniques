@@ -58,8 +58,7 @@ Tester::execute()
     }
     case TesterPhase::break_down:
     {
-      if (isItFinishBreakDownTime())
-        finishBraekDown();
+      finishBraekDown();
       break;
     }
     default:
@@ -209,9 +208,8 @@ Tester::breakDown()
 {
   if (hasCircuit())
     utilizeCircuit();
-  m_phase = static_cast<int>(TesterPhase::break_down);
-
   Simulation::instance().agenda().removeProcess(this);
+  m_phase = static_cast<int>(TesterPhase::break_down);
 
   double time = p_breakDownDurationGenerator->value();
   this->activate(time);
@@ -224,6 +222,23 @@ Tester::breakDown()
 void
 Tester::finishBraekDown()
 {
+  if (!isItFinishBreakDownTime())
+  {
+    Simulation::instance().logger().critical(
+      "Tester %d is trying to finish breakdown but is not time for that. "
+      "Current time is %f and breakdown should finish of %d",
+      m_id, Simulation::instance().simulationTime(), m_finishBreakDownTime);
+    throw std::runtime_error("Invalid breakdown finish time");
+  }
+
+  if (!isBroken())
+  {
+    Simulation::instance().logger().critical(
+      "Tester %d is in phase %d but is trying to finish breakdown",
+      m_id, m_phase);
+    throw std::runtime_error("Invalid phase during finishing the breakdown");
+  }
+
   Simulation::instance().logger().debug("tester %d finished break down", m_id);
 
   m_phase = static_cast<int>(TesterPhase::idle);
