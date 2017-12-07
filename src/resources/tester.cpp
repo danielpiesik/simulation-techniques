@@ -95,6 +95,9 @@ Tester::startTesting()
     throw std::runtime_error("Tester starts test without circuit");
   }
 
+  if (isFirstTester())
+    p_circuit->startTest();
+
   m_phase = static_cast<int>(TesterPhase::testing);
   double testing_time = RNG::instance().m_testingTimeByTester[m_id].value();
   this->activate(testing_time);
@@ -114,8 +117,9 @@ Tester::moveCircuitTo(Tester *inTester)
 }
 
 void
-Tester::utilizeCircuit()
+Tester::utilizeCircuit(bool success)
 {
+  p_circuit->finishTest(success);
   p_circuit->activate();
   p_circuit=nullptr;
   m_phase = static_cast<int>(TesterPhase::idle);
@@ -125,6 +129,12 @@ bool
 Tester::isIdle()
 {
   return static_cast<TesterPhase>(m_phase) == TesterPhase::idle;
+}
+
+bool
+Tester::isTesting()
+{
+  return static_cast<TesterPhase>(m_phase) == TesterPhase::testing;
 }
 
 bool
@@ -207,7 +217,7 @@ void
 Tester::breakDown()
 {
   if (hasCircuit())
-    utilizeCircuit();
+    utilizeCircuit(false);
   Simulation::instance().agenda().removeProcess(this);
   m_phase = static_cast<int>(TesterPhase::break_down);
 

@@ -4,6 +4,7 @@
 #include "resources/tester.hpp"
 #include "resources/circuit.hpp"
 #include "metadata/generators.hpp"
+#include "stats/statistics.hpp"
 #include "simulation.hpp"
 
 
@@ -13,6 +14,8 @@ int Circuit::m_globalId = 0;
 Circuit::Circuit()
   : m_id(m_globalId++)
   , p_tester(nullptr)
+  , m_success_finish_test(false)
+  , m_startTest(0.0)
 {
   // Simulation::instance().logger().debug("constructor of Circuit");
 }
@@ -56,6 +59,18 @@ Circuit::testedBy(Tester *inTester)
   p_tester = inTester;
 }
 
+void
+Circuit::startTest()
+{
+  m_startTest = Simulation::instance().simulationTime();
+}
+
+void
+Circuit::finishTest(bool success)
+{
+  m_success_finish_test = success;
+}
+
 int
 Circuit::id()
 {
@@ -93,16 +108,9 @@ Circuit::tryStartTesting()
   Tester &first_tester = *testers.front();
   if (table.isMotionless() && first_tester.isIdle())
   {
-      if (circuits.front() != this)
-      {
-        Simulation::instance().logger().critical(
-          "Only first circuit from queue can be tested");
-        throw std::runtime_error("Trying to test not first circuit");
-      }
-
+    table.dequeue(this);
     first_tester.prepareTest(this);
     first_tester.activate();
-    circuits.erase(circuits.begin());
     m_phase = static_cast<int>(CircuitPhase::being_tested);
   }
 }
@@ -110,6 +118,11 @@ Circuit::tryStartTesting()
 void
 Circuit::utilize()
 {
+  if (m_success_finish_test)
+  {
+    double now = Simulation::instance().simulationTime();
+    Statistcs.m_testing_time.add(now - m_startTest);
+  }
   Simulation::instance().logger().debug("circuit %d is utilized", id());
   m_terminated = true;
 }

@@ -26,6 +26,10 @@ public:
 
   void testedBy(Tester *inTester);
 
+  void startTest();
+  void finishTest(bool success);
+
+
   int id();
 
 private:
@@ -37,6 +41,9 @@ private:
   static int m_globalId;
   int m_id;
   Tester *p_tester;
+
+  bool m_success_finish_test;
+  double m_startTest;
 
 };
 

@@ -28,9 +28,10 @@ public:
 
   void prepareTest(Circuit *inCircuit);
   void moveCircuitTo(Tester *inTester);
-  void utilizeCircuit();
+  void utilizeCircuit(bool success=false);
 
   bool isIdle();
+  bool isTesting();
   bool isWaiting();
   bool isBroken();
   bool hasCircuit();

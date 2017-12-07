@@ -27,7 +27,9 @@ public:
   virtual void execute();
 
   void addTester(Tester *inTester);
+
   void enqueue(Circuit *inCircuit);
+  void dequeue(Circuit *inCircuit);
 
   bool isMotionless();
   bool isBroken();

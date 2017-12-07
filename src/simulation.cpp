@@ -4,6 +4,7 @@
 #include "metadata/settings.hpp"
 #include "metadata/generators.hpp"
 #include "resources/circuit.hpp"
+#include "stats/statistics.hpp"
 
 
 Simulation&
@@ -37,6 +38,12 @@ Simulation::start()
       delete current_process;
     }
   }
+
+  Statistcs.m_queue_size.add(Simulation::instance().table().circuits().size());
+
+  Statistcs.aggregate();
+  Statistcs.print();
+
 }
 
 Agenda&

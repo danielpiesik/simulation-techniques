@@ -15,19 +15,19 @@ static struct TaskSettings
   const unsigned int m_numberOfTesters = 3;   // N
 
   const double m_meanAndStdDevForTestingTime[3][2] = {
-    {15.0 * Time.MINUTE, 1.0 * Time.MINUTE},
-    {15.0 * Time.MINUTE, 1.0 * Time.MINUTE},
-    {15.0 * Time.MINUTE, 1.0 * Time.MINUTE},
+    {5.0 * Time.MINUTE, 1.0 * Time.MINUTE},
+    {5.0 * Time.MINUTE, 1.0 * Time.MINUTE},
+    {5.0 * Time.MINUTE, 1.0 * Time.MINUTE},
   };
 
-  const double m_circuitInjectionIntervalMean = 30 * Time.MINUTE; // A
+  const double m_circuitInjectionIntervalMean = 13 * Time.MINUTE; // A
 
-  const double m_timeOfRotation = 10 * Time.MINUTE; // T
+  const double m_timeOfRotation = 1 * Time.MINUTE; // T
 
   const double m_minBreakDownTime = 1 * Time.MINUTE; // LB
-  const double m_maxBreakDownTime = 10 * Time.MINUTE; // MB
+  const double m_maxBreakDownTime = 5 * Time.MINUTE; // MB
 
-  const double m_breakDownIntervalMean = 5 * Time.MINUTE; // TT
+  const double m_breakDownIntervalMean = 60 * Time.MINUTE; // TT
 
 } TaskSettings;
 

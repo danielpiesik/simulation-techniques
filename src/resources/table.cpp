@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "resources/table.hpp"
 #include "metadata/settings.hpp"
+#include "stats/statistics.hpp"
 #include "simulation.hpp"
 
 
@@ -98,9 +99,31 @@ Table::addTester(Tester *inTester)
 void
 Table::enqueue(Circuit *inCircuit)
 {
+  Statistcs.m_queue_size.add(circuits().size());
   circuits().push_back(inCircuit);
+
   Simulation::instance().logger().debug(
     "circuit %d added to queue (queue size = %d)",
+    inCircuit->id(), circuits().size());
+}
+
+void
+Table::dequeue(Circuit *inCircuit)
+{
+  if (circuits().front() != inCircuit)
+  {
+    Simulation::instance().logger().critical(
+      "Only first circuit from queue can be dequeued. "
+      "First circuit is %d but tried to dequeued circuit %d",
+      circuits().front()->id(), inCircuit->id());
+    throw std::runtime_error("Trying to dequeued not first circuit");
+  }
+
+  Statistcs.m_queue_size.add(circuits().size());
+  circuits().erase(circuits().begin());
+
+  Simulation::instance().logger().debug(
+    "circuit %d removed from queue (queue size = %d)",
     inCircuit->id(), circuits().size());
 }
 
@@ -147,22 +170,19 @@ Table::finishRotate()
 
     if(tester->isLastTester())
     {
-      tester->utilizeCircuit();
+      tester->utilizeCircuit(true);
     }
     else
     {
       if (prev_tester->isBroken())
-        tester->utilizeCircuit();
+        tester->utilizeCircuit(false);
       else
         tester->moveCircuitTo(prev_tester);
     }
-
-    if(tester->isFirstTester()
-       && !Simulation::instance().table().circuits().empty())
-    {
-      Simulation::instance().table().circuits().front()->activate();
-    }
   }
+
+  if(!Simulation::instance().table().circuits().empty())
+    Simulation::instance().table().circuits().front()->activate();
 
   m_phase = static_cast<int>(TablePhase::motionless);
 }
@@ -189,9 +209,10 @@ Table::utilizeAllCircuits()
   )
   {
     Tester *tester = (*tester_iter);
+    if (tester->isTesting())
+        Simulation::instance().agenda().removeProcess(tester);
     if (tester->hasCircuit())
-      tester->utilizeCircuit();
-    Simulation::instance().agenda().removeProcess(tester);
+      tester->utilizeCircuit(false);
   }
 }
 
