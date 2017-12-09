@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include "resources/tester.hpp"
 #include "metadata/generators.hpp"
+#include "stats/statistics.hpp"
 #include "simulation.hpp"
 
 
@@ -73,12 +74,12 @@ Tester::execute()
 void
 Tester::prepareTest(Circuit *inCircuit)
 {
-  if (!isIdle())
+  if (!(isIdle() or isBroken()))
   {
     Simulation::instance().logger().critical(
-      "Tester %d prepares test of circuit %d but he is not idle",
+      "Tester %d prepares test of circuit %d but he is not idle or broken",
       m_id, inCircuit->id());
-    throw std::runtime_error("Tester prepares test without circuit");
+    throw std::runtime_error("Tester prepares test but he is not idle");
   }
 
   p_circuit = inCircuit;
@@ -111,7 +112,13 @@ void
 Tester::moveCircuitTo(Tester *inTester)
 {
   inTester->prepareTest(p_circuit);
-  inTester->activate();
+  if (inTester->isBroken())
+  {
+    inTester->utilizeCircuit(false);
+    inTester->m_phase = static_cast<int>(TesterPhase::break_down);
+  }
+  else
+    inTester->activate();
   p_circuit=nullptr;
   m_phase = static_cast<int>(TesterPhase::idle);
 }
@@ -123,6 +130,8 @@ Tester::utilizeCircuit(bool success)
   p_circuit->activate();
   p_circuit=nullptr;
   m_phase = static_cast<int>(TesterPhase::idle);
+  if (!success)
+    Statistcs.m_curcuit_utilization.get(m_id).add();
 }
 
 bool

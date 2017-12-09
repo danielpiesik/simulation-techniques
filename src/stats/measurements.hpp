@@ -1,6 +1,7 @@
 #ifndef MEASUREMENTS_HPP
 #define MEASUREMENTS_HPP
 
+#include <vector>
 #include "stats/measure_container.hpp"
 
 
@@ -47,6 +48,38 @@ private:
 
   double m_value;
   int m_iter;
+
+};
+
+
+//=============================================================================
+// CircuitUtilization
+//=============================================================================
+
+struct CircuitUtilization
+{
+
+  struct _Utilizations : public MeasureContainer<int>
+  {
+    void add();
+    int value();
+    void reset();
+
+    int m_value;
+  };
+
+public:
+
+  CircuitUtilization();
+
+  _Utilizations& get(int tester_id);
+
+  void aggregate();
+  void reset();
+
+private:
+
+  static std::vector<_Utilizations> m_utilization_counters;
 
 };
 

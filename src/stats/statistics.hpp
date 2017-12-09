@@ -9,6 +9,7 @@ static struct Statistcs
 
   static TestingTime m_testing_time;
   static QueueSize m_queue_size;
+  static CircuitUtilization m_curcuit_utilization;
 
   void aggregate();
   void print();

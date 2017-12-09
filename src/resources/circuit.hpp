@@ -29,7 +29,6 @@ public:
   void startTest();
   void finishTest(bool success);
 
-
   int id();
 
 private:

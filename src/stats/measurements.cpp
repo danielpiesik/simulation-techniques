@@ -1,4 +1,5 @@
 #include "stats/measurements.hpp"
+#include "metadata/settings.hpp"
 #include "simulation.hpp"
 
 
@@ -63,4 +64,55 @@ TestingTime::reset()
 {
   m_value = 0.0;
   m_iter = 0;
+}
+
+
+//=============================================================================
+// CircuitUtilization
+//=============================================================================
+
+std::vector<CircuitUtilization::_Utilizations>
+  CircuitUtilization::m_utilization_counters(TaskSettings.m_numberOfTesters);
+
+CircuitUtilization::CircuitUtilization()
+{
+  reset();
+}
+
+CircuitUtilization::_Utilizations&
+CircuitUtilization::get(int tester_id)
+{
+  return m_utilization_counters[tester_id];
+}
+
+void
+CircuitUtilization::aggregate()
+{
+  for (auto &counter : m_utilization_counters)
+    counter.aggregate();
+}
+
+void
+CircuitUtilization::reset()
+{
+  for (auto &counter : m_utilization_counters)
+    counter.reset();
+}
+
+void
+CircuitUtilization::_Utilizations::add()
+{
+  ++m_value;
+}
+
+int
+CircuitUtilization::_Utilizations::value()
+{
+  return m_value;
+}
+
+void
+CircuitUtilization::_Utilizations::reset()
+{
+  m_value = 0;
 }

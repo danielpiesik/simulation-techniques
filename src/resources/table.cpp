@@ -169,16 +169,9 @@ Table::finishRotate()
       continue;
 
     if(tester->isLastTester())
-    {
       tester->utilizeCircuit(true);
-    }
     else
-    {
-      if (prev_tester->isBroken())
-        tester->utilizeCircuit(false);
-      else
-        tester->moveCircuitTo(prev_tester);
-    }
+      tester->moveCircuitTo(prev_tester);
   }
 
   if(!Simulation::instance().table().circuits().empty())
