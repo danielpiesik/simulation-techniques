@@ -12,22 +12,23 @@ static struct Time
 
 static struct TaskSettings
 {
-  const unsigned int m_numberOfTesters = 3;   // N
+  const unsigned int m_numberOfTesters = 4;   // N
 
-  const double m_meanAndStdDevForTestingTime[3][2] = {
-    {5.0 * Time.MINUTE, 1.0 * Time.MINUTE},
-    {5.0 * Time.MINUTE, 1.0 * Time.MINUTE},
-    {5.0 * Time.MINUTE, 1.0 * Time.MINUTE},
+  const double m_meanAndStdDevForTestingTime[4][2] = {
+    {0.3 * Time.MINUTE, 0.01 * Time.MINUTE},
+    {0.8 * Time.MINUTE, 0.03 * Time.MINUTE},
+    {0.5 * Time.MINUTE, 0.02 * Time.MINUTE},
+    {0.6 * Time.MINUTE, 0.01 * Time.MINUTE},
   };
 
-  const double m_circuitInjectionIntervalMean = 13 * Time.MINUTE; // A
+  const double m_circuitInjectionIntervalMean = 2 * Time.MINUTE; // A
 
-  const double m_timeOfRotation = 1 * Time.MINUTE; // T
+  const double m_timeOfRotation = 0.1 * Time.MINUTE; // T
 
-  const double m_minBreakDownTime = 1 * Time.MINUTE; // LB
-  const double m_maxBreakDownTime = 5 * Time.MINUTE; // MB
+  const double m_minBreakDownTime = 5 * Time.MINUTE; // LB
+  const double m_maxBreakDownTime = 10 * Time.MINUTE; // MB
 
-  const double m_breakDownIntervalMean = 60 * Time.MINUTE; // TT
+  const double m_breakDownIntervalMean = 30 * Time.MINUTE; // TT
 
 } TaskSettings;
 
