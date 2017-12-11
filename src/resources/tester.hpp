@@ -21,7 +21,8 @@ class Tester: public Process
 public:
 
   Tester(int id, ExponentialRNG* inBreakDownGenerator,
-         UniformRNG* inBreakDownDurationGenerator);
+         UniformRNG* inBreakDownDurationGenerator,
+         NormalRNG* inTestingTimeGenerator);
   ~Tester();
 
   virtual void execute();
@@ -38,6 +39,8 @@ public:
 
   bool isFirstTester();
   bool isLastTester();
+
+  void reset();
 
 private:
 
@@ -58,6 +61,8 @@ private:
 
   ExponentialRNG* p_breakDownGenerator;
   UniformRNG* p_breakDownDurationGenerator;
+  NormalRNG* p_testingTimeGenerator;
+
 };
 
 

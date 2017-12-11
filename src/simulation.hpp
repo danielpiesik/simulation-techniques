@@ -31,6 +31,7 @@ public:
 private:
 
   Simulation();
+  void reset();
 
   Logger *p_logger;
   Agenda *p_agenda;

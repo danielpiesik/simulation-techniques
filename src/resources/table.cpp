@@ -15,7 +15,6 @@ Table::Table(ExponentialRNG* inBreakDownGenerator,
   , p_breakDownDurationGenerator(inBreakDownDurationGenerator)
 {
   Simulation::instance().logger().debug("constructor of Table");
-  planBreakDown();
 }
 
 Table::~Table()
@@ -149,6 +148,24 @@ std::vector<Circuit*>&
 Table::circuits()
 {
   return m_circuits;
+}
+
+void
+Table::reset()
+{
+  m_nextBreakDownTime = 0.0;
+  m_finishBreakDownTime = 0.0;
+  m_phase = static_cast<int>(TablePhase::motionless);
+
+  while (!m_circuits.empty())
+  {
+    delete *m_circuits.begin();
+    m_circuits.erase(m_circuits.begin());
+  }
+
+  p_breakDownGenerator->reset();
+  p_breakDownDurationGenerator->reset();
+  planBreakDown();
 }
 
 void

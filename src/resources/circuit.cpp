@@ -3,12 +3,14 @@
 #include "resources/table.hpp"
 #include "resources/tester.hpp"
 #include "resources/circuit.hpp"
-#include "metadata/generators.hpp"
+#include "metadata/settings.hpp"
 #include "stats/statistics.hpp"
 #include "simulation.hpp"
 
 
 int Circuit::m_globalId = 0;
+ExponentialRNG Circuit::m_curcuitGenerator =
+  ExponentialRNG(1.0 / TaskSettings.m_circuitInjectionIntervalMean);
 
 
 Circuit::Circuit()
@@ -78,13 +80,20 @@ Circuit::id()
 }
 
 void
+Circuit::reset()
+{
+  m_globalId = 0;
+  m_curcuitGenerator.reset();
+}
+
+void
 Circuit::injection()
 {
   Simulation::instance().table().enqueue(this);
   m_phase = static_cast<int>(CircuitPhase::waiting_in_queue);
 
   Circuit *new_circuit = new Circuit();
-  double time = RNG::instance().m_curcuitGenerator.value();
+  double time = m_curcuitGenerator.value();
   new_circuit->activate(time);
   Simulation::instance().logger().debug(
     "inject next circuit (%d) on %f",

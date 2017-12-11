@@ -37,6 +37,8 @@ public:
   std::vector<Tester*>& testers();
   std::vector<Circuit*>& circuits();
 
+  void reset();
+
 private:
 
   void tryRotate();

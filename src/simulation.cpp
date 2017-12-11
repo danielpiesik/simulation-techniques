@@ -2,7 +2,6 @@
 #include "rng/rng.hpp"
 #include "simulation.hpp"
 #include "metadata/settings.hpp"
-#include "metadata/generators.hpp"
 #include "resources/circuit.hpp"
 #include "stats/statistics.hpp"
 
@@ -20,30 +19,37 @@ Simulation::start()
   logger().info("start simulation");
 
 
-  RNG::instance().m_curcuitGenerator.reset();
-  for (auto &rng : RNG::instance().m_testingTimeByTester)
-    rng.reset();
-
-  (new Circuit)->activate();
-
-  while (Statistics.m_success_utilization.value() <
-    SimulationSettings.m_maxSuccessUtilization)
+  for(int iter = 0; iter < SimulationSettings.m_iteration_number; ++iter)
   {
-    Event *current_event = agenda().first();
-    Process *current_process = current_event->process();
-    m_simulationTime = current_event->executeTime();
-    agenda().removeFirst();
-    current_process->execute();
-    if (current_process->isTerminated())
+    reset();
+    logger().info("start %d iteration", iter + 1);
+
+    (new Circuit)->activate();
+
+    while (Statistics.m_success_utilization.value() <
+      SimulationSettings.m_maxSuccessUtilization)
     {
-      delete current_process;
+      Event *current_event = agenda().first();
+      Process *current_process = current_event->process();
+      m_simulationTime = current_event->executeTime();
+      agenda().removeFirst();
+      current_process->execute();
+      if (current_process->isTerminated())
+      {
+        delete current_process;
+      }
     }
+
+    Statistics.m_queue_size.add(
+      Simulation::instance().table().circuits().size());
+
+    Statistics.aggregate();
   }
 
-  Statistics.m_queue_size.add(Simulation::instance().table().circuits().size());
-
-  Statistics.aggregate();
   Statistics.print();
+
+  logger().setLevel(Verbose::none);
+  reset();
 
 }
 
@@ -99,10 +105,13 @@ Simulation::createResources()
   {
     ExponentialRNG* g1;
     UniformRNG* g2;
+    NormalRNG* g3;
     g1 = new ExponentialRNG(1.0 / TaskSettings.m_breakDownIntervalMean);
     g2 = new UniformRNG(TaskSettings.m_minBreakDownTime,
                         TaskSettings.m_maxBreakDownTime);
-    table().addTester(new Tester(i, g1, g2));
+    g3 = new NormalRNG(TaskSettings.m_meanAndStdDevForTestingTime[i][0],
+                       TaskSettings.m_meanAndStdDevForTestingTime[i][1]);
+    table().addTester(new Tester(i, g1, g2, g3));
   }
 }
 
@@ -112,6 +121,18 @@ Simulation::Simulation()
   , p_table(nullptr)
   , m_simulationTime(0.0)
 {}
+
+void
+Simulation::reset()
+{
+  m_simulationTime = 0.0;
+  agenda().clear();
+  for(auto &tester : table().testers())
+    tester->reset();
+  table().reset();
+  Circuit::reset();
+  Statistics.reset();
+}
 
 Simulation::~Simulation()
 {

@@ -1,21 +1,21 @@
 #include <stdexcept>
 #include "resources/tester.hpp"
-#include "metadata/generators.hpp"
 #include "stats/statistics.hpp"
 #include "simulation.hpp"
 
 
 Tester::Tester(int id, ExponentialRNG* inBreakDownGenerator,
-               UniformRNG* inBreakDownDurationGenerator)
+               UniformRNG* inBreakDownDurationGenerator,
+               NormalRNG* inTestingTimeGenerator)
   : m_id(id)
   , p_circuit(nullptr)
   , m_nextBreakDownTime(0.0)
   , m_finishBreakDownTime(0.0)
   , p_breakDownGenerator(inBreakDownGenerator)
   , p_breakDownDurationGenerator(inBreakDownDurationGenerator)
+  , p_testingTimeGenerator(inTestingTimeGenerator)
 {
   Simulation::instance().logger().debug("constructor of Tester");
-  planBreakDown();
 }
 
 Tester::~Tester()
@@ -28,6 +28,8 @@ Tester::~Tester()
     delete p_breakDownGenerator;
   if (p_breakDownDurationGenerator)
     delete p_breakDownDurationGenerator;
+  if (p_testingTimeGenerator)
+    delete p_testingTimeGenerator;
 }
 
 void
@@ -100,7 +102,7 @@ Tester::startTesting()
     p_circuit->startTest();
 
   m_phase = static_cast<int>(TesterPhase::testing);
-  double testing_time = RNG::instance().m_testingTimeByTester[m_id].value();
+  double testing_time = p_testingTimeGenerator->value();
   this->activate(testing_time);
   Simulation::instance().logger().debug(
     "tester %d starts test the circuit %d and will finish on %f",
@@ -174,6 +176,22 @@ bool
 Tester::isLastTester()
 {
   return Simulation::instance().table().testers().back() == this;
+}
+
+void
+Tester::reset()
+{
+  if (p_circuit)
+    delete p_circuit;
+  p_circuit = nullptr;
+  m_nextBreakDownTime = 0.0;
+  m_finishBreakDownTime = 0.0;
+  m_phase = static_cast<int>(TesterPhase::idle);
+
+  p_breakDownGenerator->reset();
+  p_breakDownDurationGenerator->reset();
+  p_testingTimeGenerator->reset();
+  planBreakDown();
 }
 
 void

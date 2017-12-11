@@ -18,6 +18,7 @@ public:
   Event* first() const;
   void removeFirst();
   bool isEmpty() const;
+  void clear();
 
   void removeProcess(Process *inProcess);
 

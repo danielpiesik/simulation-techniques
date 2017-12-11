@@ -37,6 +37,8 @@ static struct SimulationSettings
 {
   const int m_maxSuccessUtilization = 2500;
 
+  const int m_iteration_number = 10;
+
 } SimulationSettings;
 
 

@@ -1,6 +1,7 @@
 #ifndef CIRCUIT_HPP
 #define CIRCUIT_HPP
 
+#include "rng/rng.hpp"
 #include "m4/process.hpp"
 
 class Tester;
@@ -31,6 +32,8 @@ public:
 
   int id();
 
+  static void reset();
+
 private:
 
   void injection();
@@ -43,6 +46,8 @@ private:
 
   bool m_success_finish_test;
   double m_startTest;
+
+  static ExponentialRNG m_curcuitGenerator;
 
 };
 

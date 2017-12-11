@@ -52,6 +52,13 @@ Agenda::isEmpty() const
 }
 
 void
+Agenda::clear()
+{
+  while (!isEmpty())
+    removeFirst();
+}
+
+void
 Agenda::removeProcess(Process *inProcess)
 {
   std::vector<Event*>::iterator event_iter;
