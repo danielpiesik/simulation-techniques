@@ -35,7 +35,7 @@ static struct TaskSettings
 
 static struct SimulationSettings
 {
-  const int a = 0; // TODO: remove it. It is only for silencing warning
+  const int m_maxSuccessUtilization = 2500;
 
 } SimulationSettings;
 

@@ -26,7 +26,8 @@ Simulation::start()
 
   (new Circuit)->activate();
 
-  while (simulationTime() < 500)
+  while (Statistcs.m_success_utilization.value() <
+    SimulationSettings.m_maxSuccessUtilization)
   {
     Event *current_event = agenda().first();
     Process *current_process = current_event->process();

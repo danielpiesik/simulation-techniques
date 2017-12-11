@@ -131,7 +131,7 @@ Tester::utilizeCircuit(bool success)
   p_circuit=nullptr;
   m_phase = static_cast<int>(TesterPhase::idle);
   if (!success)
-    Statistcs.m_curcuit_utilization.get(m_id).add();
+    Statistcs.m_failure_utilization.get(m_id).add();
 }
 
 bool

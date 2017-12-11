@@ -68,51 +68,78 @@ TestingTime::reset()
 
 
 //=============================================================================
-// CircuitUtilization
+// FailureUtilization
 //=============================================================================
 
-std::vector<CircuitUtilization::_Utilizations>
-  CircuitUtilization::m_utilization_counters(TaskSettings.m_numberOfTesters);
+std::vector<FailureUtilization::_Utilizations>
+  FailureUtilization::m_utilization_counters(TaskSettings.m_numberOfTesters);
 
-CircuitUtilization::CircuitUtilization()
+FailureUtilization::FailureUtilization()
 {
   reset();
 }
 
-CircuitUtilization::_Utilizations&
-CircuitUtilization::get(int tester_id)
+FailureUtilization::_Utilizations&
+FailureUtilization::get(int tester_id)
 {
   return m_utilization_counters[tester_id];
 }
 
 void
-CircuitUtilization::aggregate()
+FailureUtilization::aggregate()
 {
   for (auto &counter : m_utilization_counters)
     counter.aggregate();
 }
 
 void
-CircuitUtilization::reset()
+FailureUtilization::reset()
 {
   for (auto &counter : m_utilization_counters)
     counter.reset();
 }
 
 void
-CircuitUtilization::_Utilizations::add()
+FailureUtilization::_Utilizations::add()
 {
   ++m_value;
 }
 
 int
-CircuitUtilization::_Utilizations::value()
+FailureUtilization::_Utilizations::value()
 {
   return m_value;
 }
 
 void
-CircuitUtilization::_Utilizations::reset()
+FailureUtilization::_Utilizations::reset()
+{
+  m_value = 0;
+}
+
+//=============================================================================
+// SuccessUtilization
+//=============================================================================
+
+SuccessUtilization::SuccessUtilization()
+{
+  reset();
+}
+
+void
+SuccessUtilization::add()
+{
+  ++m_value;
+}
+
+int
+SuccessUtilization::value()
+{
+  return m_value;
+}
+
+void
+SuccessUtilization::reset()
 {
   m_value = 0;
 }

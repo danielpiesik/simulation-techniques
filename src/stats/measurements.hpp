@@ -53,10 +53,10 @@ private:
 
 
 //=============================================================================
-// CircuitUtilization
+// FailureUtilization
 //=============================================================================
 
-struct CircuitUtilization
+struct FailureUtilization
 {
 
   struct _Utilizations : public MeasureContainer<int>
@@ -70,7 +70,7 @@ struct CircuitUtilization
 
 public:
 
-  CircuitUtilization();
+  FailureUtilization();
 
   _Utilizations& get(int tester_id);
 
@@ -80,6 +80,28 @@ public:
 private:
 
   static std::vector<_Utilizations> m_utilization_counters;
+
+};
+
+
+//=============================================================================
+// SuccessUtilization
+//=============================================================================
+
+struct SuccessUtilization: public MeasureContainer<int>
+{
+
+public:
+
+  SuccessUtilization();
+
+  void add();
+  int value();
+  void reset();
+
+private:
+
+  int m_value;
 
 };
 

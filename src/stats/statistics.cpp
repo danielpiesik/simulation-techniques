@@ -5,7 +5,8 @@
 
 TestingTime Statistcs::m_testing_time = TestingTime();
 QueueSize Statistcs::m_queue_size = QueueSize();
-CircuitUtilization Statistcs::m_curcuit_utilization = CircuitUtilization();
+FailureUtilization Statistcs::m_failure_utilization = FailureUtilization();
+SuccessUtilization Statistcs::m_success_utilization = SuccessUtilization();
 
 
 void
@@ -13,7 +14,8 @@ Statistcs::aggregate()
 {
   m_queue_size.aggregate();
   m_testing_time.aggregate();
-  m_curcuit_utilization.aggregate();
+  m_failure_utilization.aggregate();
+  m_success_utilization.aggregate();
 }
 
 void
@@ -33,8 +35,8 @@ Statistcs::print()
   for(unsigned int i = 0; i < TaskSettings.m_numberOfTesters; ++i)
   {
     printf("\t Tester %02d: %.2f +/- %.2f circuits\n", i + 1,
-      m_curcuit_utilization.get(i).mean(),
-      m_curcuit_utilization.get(i).std_dev());
+      m_failure_utilization.get(i).mean(),
+      m_failure_utilization.get(i).std_dev());
   }
 
   printf("\n");
@@ -45,5 +47,6 @@ Statistcs::reset()
 {
   m_queue_size.reset();
   m_testing_time.reset();
-  m_curcuit_utilization.reset();
+  m_failure_utilization.reset();
+  m_success_utilization.reset();
 }
