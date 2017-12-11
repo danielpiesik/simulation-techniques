@@ -99,7 +99,7 @@ Table::addTester(Tester *inTester)
 void
 Table::enqueue(Circuit *inCircuit)
 {
-  Statistcs.m_queue_size.add(circuits().size());
+  Statistics.m_queue_size.add(circuits().size());
   circuits().push_back(inCircuit);
 
   Simulation::instance().logger().debug(
@@ -119,7 +119,7 @@ Table::dequeue(Circuit *inCircuit)
     throw std::runtime_error("Trying to dequeued not first circuit");
   }
 
-  Statistcs.m_queue_size.add(circuits().size());
+  Statistics.m_queue_size.add(circuits().size());
   circuits().erase(circuits().begin());
 
   Simulation::instance().logger().debug(

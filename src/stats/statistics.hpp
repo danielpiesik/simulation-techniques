@@ -4,7 +4,7 @@
 #include "stats/measurements.hpp"
 
 
-static struct Statistcs
+static struct Statistics
 {
 
   static TestingTime m_testing_time;
@@ -16,7 +16,7 @@ static struct Statistcs
   void print();
   void reset();
 
-} Statistcs;
+} Statistics;
 
 
 #endif // STATISTICS_HPP

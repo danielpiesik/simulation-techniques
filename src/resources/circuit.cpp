@@ -121,8 +121,8 @@ Circuit::utilize()
   if (m_success_finish_test)
   {
     double now = Simulation::instance().simulationTime();
-    Statistcs.m_testing_time.add(now - m_startTest);
-    Statistcs.m_success_utilization.add();
+    Statistics.m_testing_time.add(now - m_startTest);
+    Statistics.m_success_utilization.add();
   }
   Simulation::instance().logger().debug("circuit %d is utilized", id());
   m_terminated = true;

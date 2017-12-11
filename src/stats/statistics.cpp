@@ -3,14 +3,14 @@
 #include "metadata/settings.hpp"
 
 
-TestingTime Statistcs::m_testing_time = TestingTime();
-QueueSize Statistcs::m_queue_size = QueueSize();
-FailureUtilization Statistcs::m_failure_utilization = FailureUtilization();
-SuccessUtilization Statistcs::m_success_utilization = SuccessUtilization();
+TestingTime Statistics::m_testing_time = TestingTime();
+QueueSize Statistics::m_queue_size = QueueSize();
+FailureUtilization Statistics::m_failure_utilization = FailureUtilization();
+SuccessUtilization Statistics::m_success_utilization = SuccessUtilization();
 
 
 void
-Statistcs::aggregate()
+Statistics::aggregate()
 {
   m_queue_size.aggregate();
   m_testing_time.aggregate();
@@ -19,7 +19,7 @@ Statistcs::aggregate()
 }
 
 void
-Statistcs::print()
+Statistics::print()
 {
   std::string separate = "****************************************************";
 
@@ -43,7 +43,7 @@ Statistcs::print()
 }
 
 void
-Statistcs::reset()
+Statistics::reset()
 {
   m_queue_size.reset();
   m_testing_time.reset();

@@ -26,7 +26,7 @@ Simulation::start()
 
   (new Circuit)->activate();
 
-  while (Statistcs.m_success_utilization.value() <
+  while (Statistics.m_success_utilization.value() <
     SimulationSettings.m_maxSuccessUtilization)
   {
     Event *current_event = agenda().first();
@@ -40,10 +40,10 @@ Simulation::start()
     }
   }
 
-  Statistcs.m_queue_size.add(Simulation::instance().table().circuits().size());
+  Statistics.m_queue_size.add(Simulation::instance().table().circuits().size());
 
-  Statistcs.aggregate();
-  Statistcs.print();
+  Statistics.aggregate();
+  Statistics.print();
 
 }
 
