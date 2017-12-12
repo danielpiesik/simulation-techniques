@@ -105,4 +105,37 @@ private:
 
 };
 
+
+//=============================================================================
+// CircuitLiveTime
+//=============================================================================
+
+struct CircuitLiveTime
+{
+
+public:
+
+  struct _CircuitLiveTime
+  {
+    double simulation_time;
+    double circuit_live_time;
+  };
+
+  CircuitLiveTime();
+
+  void add(double value);
+  void reset();
+
+  void save2file();
+
+private:
+
+  int m_counter;
+  std::vector<_CircuitLiveTime> m_circuits_live_times;
+  int m_iter;
+
+  void calculate();
+
+};
+
 #endif // MEASUREMENTS_HPP

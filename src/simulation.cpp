@@ -22,9 +22,27 @@ Simulation::start()
   for(int iter = 0; iter < SimulationSettings.m_iteration_number; ++iter)
   {
     reset();
-    logger().info("start %d iteration", iter + 1);
+
+    logger().info("start %02d iteration", iter + 1);
 
     (new Circuit)->activate();
+
+
+    while (Statistics.m_success_utilization.value() <
+      SimulationSettings.m_transient_phase_circuits)
+    {
+      Event *current_event = agenda().first();
+      Process *current_process = current_event->process();
+      m_simulationTime = current_event->executeTime();
+      agenda().removeFirst();
+      current_process->execute();
+      if (current_process->isTerminated())
+      {
+        delete current_process;
+      }
+    }
+
+    Statistics.reset();
 
     while (Statistics.m_success_utilization.value() <
       SimulationSettings.m_maxSuccessUtilization)
@@ -47,8 +65,8 @@ Simulation::start()
   }
 
   Statistics.print();
+  Statistics.m_circuit_live_time.save2file();
 
-  logger().setLevel(Verbose::none);
   reset();
 
 }
@@ -132,6 +150,7 @@ Simulation::reset()
   table().reset();
   Circuit::reset();
   Statistics.reset();
+  Statistics.m_circuit_live_time.reset();
 }
 
 Simulation::~Simulation()

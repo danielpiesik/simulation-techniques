@@ -18,6 +18,7 @@ Circuit::Circuit()
   , p_tester(nullptr)
   , m_success_finish_test(false)
   , m_startTest(0.0)
+  , m_injectTime(0.0)
 {
   // Simulation::instance().logger().debug("constructor of Circuit");
 }
@@ -89,15 +90,16 @@ Circuit::reset()
 void
 Circuit::injection()
 {
+  double now = Simulation::instance().simulationTime();
   Simulation::instance().table().enqueue(this);
   m_phase = static_cast<int>(CircuitPhase::waiting_in_queue);
+  m_injectTime = now;
 
   Circuit *new_circuit = new Circuit();
   double time = m_curcuitGenerator.value();
   new_circuit->activate(time);
   Simulation::instance().logger().debug(
-    "inject next circuit (%d) on %f",
-    new_circuit->id(), Simulation::instance().simulationTime() + time);
+    "inject next circuit (%d) on %f", new_circuit->id(), now + time);
 }
 
 void
@@ -131,6 +133,7 @@ Circuit::utilize()
   {
     double now = Simulation::instance().simulationTime();
     Statistics.m_testing_time.add(now - m_startTest);
+    Statistics.m_circuit_live_time.add(now - m_injectTime);
     Statistics.m_success_utilization.add();
   }
   Simulation::instance().logger().debug("circuit %d is utilized", id());

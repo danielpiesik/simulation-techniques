@@ -7,6 +7,7 @@ TestingTime Statistics::m_testing_time = TestingTime();
 QueueSize Statistics::m_queue_size = QueueSize();
 FailureUtilization Statistics::m_failure_utilization = FailureUtilization();
 SuccessUtilization Statistics::m_success_utilization = SuccessUtilization();
+CircuitLiveTime Statistics::m_circuit_live_time = CircuitLiveTime();
 
 
 void

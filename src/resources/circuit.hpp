@@ -47,6 +47,8 @@ private:
   bool m_success_finish_test;
   double m_startTest;
 
+  double m_injectTime;
+
   static ExponentialRNG m_curcuitGenerator;
 
 };

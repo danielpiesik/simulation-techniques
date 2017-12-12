@@ -39,6 +39,8 @@ static struct SimulationSettings
 
   const int m_iteration_number = 10;
 
+  const int m_transient_phase_circuits = 500;
+
 } SimulationSettings;
 
 
