@@ -14,9 +14,12 @@ Process::~Process()
 }
 
 void
-Process::activate(double time)
+Process::activate(double time, bool onTime)
 {
-  p_event->setExecuteTime(Simulation::instance().simulationTime() + time);
+  if (onTime)
+    p_event->setExecuteTime(time);
+  else
+    p_event->setExecuteTime(Simulation::instance().simulationTime() + time);
   Simulation::instance().agenda().addEvent(p_event);
 }
 

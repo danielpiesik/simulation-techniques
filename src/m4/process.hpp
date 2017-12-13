@@ -13,7 +13,7 @@ public:
   virtual ~Process();
 
   virtual void execute() = 0;
-  void activate(double time=0.0);
+  void activate(double time=0.0, bool onTime=false);
   bool isTerminated() const;
 
 protected:

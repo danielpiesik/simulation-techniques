@@ -227,7 +227,11 @@ Table::utilizeAllCircuits()
   {
     Tester *tester = (*tester_iter);
     if (tester->isTesting())
-        Simulation::instance().agenda().removeProcess(tester);
+    {
+      Simulation::instance().agenda().removeProcess(tester);
+      // don't remove event responsible for going to break down
+      tester->activate(tester->nextBreakDownTime(), true);
+    }
     if (tester->hasCircuit())
       tester->utilizeCircuit(false);
   }

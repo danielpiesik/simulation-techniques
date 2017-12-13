@@ -43,6 +43,8 @@ public:
   void reset();
   void saveGeneratorsValues();
 
+  double nextBreakDownTime();
+
 private:
 
   void startTesting();

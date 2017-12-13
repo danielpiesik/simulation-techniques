@@ -204,6 +204,12 @@ Tester::saveGeneratorsValues()
   p_testingTimeGenerator->save2file(prefix + "_testing_time.txt");
 }
 
+double
+Tester::nextBreakDownTime()
+{
+  return m_nextBreakDownTime;
+}
+
 void
 Tester::finishTesting()
 {
