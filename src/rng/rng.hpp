@@ -4,7 +4,31 @@
 #include <random>
 
 
-class UniformRNG
+template<class T>
+class RNG
+{
+
+public:
+
+  RNG();
+  virtual ~RNG();
+
+  virtual double value();
+  virtual void reset();
+
+
+protected:
+
+  T m_distribution;
+
+private:
+
+  std::default_random_engine m_generator;
+
+};
+
+
+class UniformRNG : public RNG<std::uniform_real_distribution<double>>
 {
 
 public:
@@ -12,19 +36,10 @@ public:
   UniformRNG(double a = 0.0, double b = 1.0);
   ~UniformRNG();
 
-  double value();
-  double value(double min, double max);
-  void reset();
-
-private:
-
-  std::default_random_engine m_generator;
-  std::uniform_real_distribution<double> m_distribution;
-
 };
 
 
-class ExponentialRNG
+class ExponentialRNG : public RNG<std::exponential_distribution<double>>
 {
 
 public:
@@ -32,32 +47,16 @@ public:
   ExponentialRNG(double lambda = 1.0);   // lambda = 1 / mean
   ~ExponentialRNG();
 
-  double value();
-  void reset();
-
-private:
-
-  std::default_random_engine m_generator;
-  std::exponential_distribution<double> m_distribution;
-
 };
 
 
-class NormalRNG
+class NormalRNG : public RNG<std::normal_distribution<double>>
 {
 
 public:
 
   NormalRNG(double mean = 0.0, double stddev = 1.0);
   ~NormalRNG();
-
-  double value();
-  void reset();
-
-private:
-
-  std::default_random_engine m_generator;
-  std::normal_distribution<double> m_distribution;
 
 };
 
