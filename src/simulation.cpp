@@ -16,9 +16,6 @@ Simulation::instance()
 void
 Simulation::start()
 {
-  logger().info("start simulation");
-
-
   for(int iter = 0; iter < SimulationSettings.m_iteration_number; ++iter)
   {
     reset();
@@ -26,7 +23,6 @@ Simulation::start()
     logger().info("start %02d iteration", iter + 1);
 
     (new Circuit)->activate();
-
 
     while (Statistics.m_success_utilization.value() <
       SimulationSettings.m_transient_phase_circuits)
@@ -65,13 +61,11 @@ Simulation::start()
 
     if (iter == 0)
       save2fileDistributions();
+
+    logger().info("end   %02d iteration", iter + 1);
   }
 
-  Statistics.print();
   Statistics.m_circuit_live_time.save2file();
-
-  reset();
-
 }
 
 Agenda&
@@ -136,6 +130,30 @@ Simulation::createResources()
   }
 }
 
+void
+Simulation::destroyResources()
+{
+  logger().info("remove resources");
+  reset();
+
+  if (p_agenda)
+  {
+    delete p_agenda;
+    p_agenda = nullptr;
+  }
+  if (p_table)
+  {
+    delete p_table;
+    p_table = nullptr;
+  }
+}
+
+void
+Simulation::printStats()
+{
+  Statistics.print();
+}
+
 Simulation::Simulation()
   : p_logger(nullptr)
   , p_agenda(nullptr)
@@ -166,10 +184,4 @@ Simulation::save2fileDistributions()
 }
 
 Simulation::~Simulation()
-{
-  logger().info("remove resources");
-  if (p_agenda)
-    delete p_agenda;
-  if (p_table)
-    delete p_table;
-}
+{}

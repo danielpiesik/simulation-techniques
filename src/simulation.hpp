@@ -27,6 +27,8 @@ public:
 
   void setLogger(Logger &inLogger);
   void createResources();
+  void destroyResources();
+  void printStats();
 
 private:
 

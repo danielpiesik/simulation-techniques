@@ -17,7 +17,7 @@ static struct Statistics
   void print();
   void reset();
 
-} Statistics;
+} Statistics __attribute__ ((unused));
 
 
 #endif // STATISTICS_HPP
