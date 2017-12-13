@@ -62,6 +62,9 @@ Simulation::start()
       Simulation::instance().table().circuits().size());
 
     Statistics.aggregate();
+
+    if (iter == 0)
+      save2fileDistributions();
   }
 
   Statistics.print();
@@ -151,6 +154,15 @@ Simulation::reset()
   Circuit::reset();
   Statistics.reset();
   Statistics.m_circuit_live_time.reset();
+}
+
+void
+Simulation::save2fileDistributions()
+{
+  Circuit::saveGeneratorsValues();
+  table().saveGeneratorsValues();
+  for(auto &tester : table().testers())
+    tester->saveGeneratorsValues();
 }
 
 Simulation::~Simulation()

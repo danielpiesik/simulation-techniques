@@ -38,6 +38,7 @@ public:
   std::vector<Circuit*>& circuits();
 
   void reset();
+  void saveGeneratorsValues();
 
 private:
 

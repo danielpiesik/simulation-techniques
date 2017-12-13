@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "stats/measurements.hpp"
 #include "metadata/settings.hpp"
 #include "simulation.hpp"
@@ -179,10 +180,12 @@ CircuitLiveTime::reset()
 void
 CircuitLiveTime::save2file()
 {
+  std::string dir_str = "output/transient_phase/";
+
   calculate();
 
   std::ofstream file;
-  file.open("output/transient_phase/transient_phase.txt",
+  file.open(dir_str + "transient_phase.txt",
             std::ios_base::out | std::ios_base::trunc);
   for(auto &circuit_live_time : m_circuits_live_times)
   {
@@ -191,7 +194,7 @@ CircuitLiveTime::save2file()
   }
   file.close();
 
-  file.open("output/transient_phase/metadata.txt",
+  file.open(dir_str + "metadata.txt",
             std::ios_base::out | std::ios_base::trunc);
   file << SimulationSettings.m_transient_phase_circuits
        << " # transient phase" << std::endl;

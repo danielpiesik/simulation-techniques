@@ -88,6 +88,12 @@ Circuit::reset()
 }
 
 void
+Circuit::saveGeneratorsValues()
+{
+  m_curcuitGenerator.save2file("circuit_generator.txt");
+}
+
+void
 Circuit::injection()
 {
   double now = Simulation::instance().simulationTime();

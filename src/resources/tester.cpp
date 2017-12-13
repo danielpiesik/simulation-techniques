@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <string>
 #include "resources/tester.hpp"
 #include "stats/statistics.hpp"
 #include "simulation.hpp"
@@ -192,6 +193,15 @@ Tester::reset()
   p_breakDownDurationGenerator->reset();
   p_testingTimeGenerator->reset();
   planBreakDown();
+}
+
+void
+Tester::saveGeneratorsValues()
+{
+  std::string prefix = "tester_" + std::to_string(m_id);
+  p_breakDownGenerator->save2file(prefix + "_break_down_generator.txt");
+  p_breakDownDurationGenerator->save2file(prefix + "_break_down_duration.txt");
+  p_testingTimeGenerator->save2file(prefix + "_testing_time.txt");
 }
 
 void

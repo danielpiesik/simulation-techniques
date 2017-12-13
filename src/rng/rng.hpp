@@ -2,6 +2,8 @@
 #define RNG_HPP
 
 #include <random>
+#include <vector>
+#include <string>
 
 
 template<class T>
@@ -16,6 +18,7 @@ public:
   virtual double value();
   virtual void reset();
 
+  virtual void save2file(const std::string &inPath);
 
 protected:
 
@@ -24,6 +27,7 @@ protected:
 private:
 
   std::default_random_engine m_generator;
+  std::vector<double> m_values;
 
 };
 

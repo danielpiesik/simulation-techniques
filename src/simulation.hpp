@@ -32,6 +32,7 @@ private:
 
   Simulation();
   void reset();
+  void save2fileDistributions();
 
   Logger *p_logger;
   Agenda *p_agenda;

@@ -169,6 +169,13 @@ Table::reset()
 }
 
 void
+Table::saveGeneratorsValues()
+{
+  p_breakDownGenerator->save2file("table_break_down_generator.txt");
+  p_breakDownDurationGenerator->save2file("table_break_down_duration.txt");
+}
+
+void
 Table::finishRotate()
 {
   Simulation::instance().logger().debug("the table finished the rotation");

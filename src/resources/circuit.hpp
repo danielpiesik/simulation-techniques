@@ -33,6 +33,7 @@ public:
   int id();
 
   static void reset();
+  static void saveGeneratorsValues();
 
 private:
 

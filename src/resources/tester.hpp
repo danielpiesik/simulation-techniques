@@ -41,6 +41,7 @@ public:
   bool isLastTester();
 
   void reset();
+  void saveGeneratorsValues();
 
 private:
 
